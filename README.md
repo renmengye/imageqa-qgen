@@ -30,7 +30,7 @@ cp lexparser_sentence.sh stanford-parser/lexparser_sentence.sh
 ```
 
 ## Examples
-### Run single sentence
+### Run a single sentence
 ```
 python question_generator.py -sentence "A man is riding a horse"
 ```
