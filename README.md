@@ -57,8 +57,7 @@ lexparser.sh sentences.txt > sentences_parsed.txt
 ```
 
 ```
-python question_generator.py -list sentences.txt \
-                             -parsed_file sentences_parsed.txt \
+python question_generator.py -parsed_file sentences_parsed.txt \
                              -output questions.pkl
 ```
 
