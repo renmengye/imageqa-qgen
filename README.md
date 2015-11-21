@@ -63,6 +63,8 @@ python question_generator.py -list sentences.txt \
 ```
 
 ## Reference
+*Exploring Models and Data for Image Question Answering*. Mengye Ren, Ryan
+Kiros, Richard Zemel. NIPS, 2015.
 ```
 @inproceedings{ren2015imageqa,
   title={Exploring Models and Data for Image Question Answering},
