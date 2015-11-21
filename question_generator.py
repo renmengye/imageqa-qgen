@@ -166,8 +166,7 @@ log = logger.get()
 
 
 class TreeNode:
-    """Parse tree.
-    """
+    """Parse tree."""
 
     def __init__(self, className, text, children, level):
         """Construct a tree.
@@ -179,8 +178,7 @@ class TreeNode:
         pass
 
     def __str__(self):
-        """To string (with tree structure parentheses).
-        """
+        """To string (with tree structure parentheses)."""
         strlist = []
         for i in range(self.level):
             strlist.append('    ')
@@ -202,8 +200,7 @@ class TreeNode:
         return ''.join(strlist)
 
     def toSentence(self):
-        """Unfold the tree structure into a string.
-        """
+        """Unfold the tree structure into a string."""
         strlist = []
         for child in self.children:
             childSent = child.toSentence()
@@ -214,15 +211,13 @@ class TreeNode:
         return ' '.join(strlist)
 
     def relevel(self, level):
-        """Re-assign level.
-        """
+        """Re-assign level."""
         self.level = level
         for child in self.children:
             child.relevel(level + 1)
 
     def copy(self):
-        """Clone a tree.
-        """
+        """Clone a tree."""
         children = []
         for child in self.children:
             children.append(child.copy())
@@ -230,8 +225,7 @@ class TreeNode:
 
 
 class TreeParser:
-    """Finite state machine implementation of syntax tree parser.
-    """
+    """Finite state machine implementation of syntax tree parser."""
 
     def __init__(self):
         self.state = 0
@@ -367,6 +361,10 @@ class TreeParser:
 
 class QuestionGenerator:
     """Generates 4 types of questions.
+    1. Object - what
+    2. Number - how many
+    3. Color - what color
+    4. Location - where
     """
 
     def __init__(self):
@@ -375,8 +373,7 @@ class QuestionGenerator:
 
     @staticmethod
     def escapeNumber(line):
-        """Convert numbers into English.
-        """
+        """Convert numbers into English."""
         line = re.sub('^11$', 'eleven', line)
         line = re.sub('^12$', 'twelve', line)
         line = re.sub('^13$', 'thirteen', line)
@@ -401,8 +398,7 @@ class QuestionGenerator:
         return line
 
     def whMovement(self, root):
-        """Performs WH - movement on a tree.
-        """
+        """Performs WH - movement on a tree."""
         stack = [[]]  # A hack for closure support
         found = [False]
 
@@ -586,11 +582,7 @@ class QuestionGenerator:
         return True
 
     def splitCCStructure(self, root):
-        """Split composite sentences.
-        Find(ROOT(S ...)(CC ...)(S ...)) structure and split them into
-        separate trees.
-        Issue: need to resolve coreference in the later sentences.
-        """
+        """Split composite sentences."""
         roots = []
 
         # Directly search for the top-most S.
@@ -615,8 +607,7 @@ class QuestionGenerator:
         return roots
 
     def lookupLexname(self, word):
-        """Look up lex name of a word in WordNet.
-        """
+        """Look up lex name of a word in WordNet."""
         if word in self.lexnameDict:
             return self.lexnameDict[word]
         else:
@@ -629,8 +620,7 @@ class QuestionGenerator:
                 return None
 
     def askWhere(self, root):
-        """Ask location type questions.
-        """
+        """Ask location type questions."""
         found = [False]
         answer = ['']
 
@@ -690,8 +680,7 @@ class QuestionGenerator:
             return []
 
     def askWhoWhat(self, root):
-        """Ask object type questions.
-        """
+        """Ask object type questions."""
         found = [False]  # A hack for closure support in python 2.7
         answer = ['']
         # Unlike in 'how many', here we enumerate all possible 'what's
@@ -821,8 +810,7 @@ class QuestionGenerator:
             rootsReplaceWhat[0] = []
 
     def askHowMany(self, root):
-        """Ask couting questions.
-        """
+        """Ask couting questions."""
         # A hack for closure support in python 2.7
         found = [False]
         answer = [None]
@@ -887,8 +875,7 @@ class QuestionGenerator:
             answer[0] = None
 
     def askColor(self, root):
-        """Ask color questions.
-        """
+        """Ask color questions."""
         found = [False]
         answer = [None]
         obj = [None]
@@ -925,8 +912,7 @@ class QuestionGenerator:
 
 
 def lookupSynonym(word):
-    """Lookup synonyms in the table.
-    """
+    """Lookup synonyms in the table."""
     if word in synonymConvert:
         return synonymConvert[word]
     else:
@@ -934,8 +920,7 @@ def lookupSynonym(word):
 
 
 def questionGen(parseFilename, outputFilename=None):
-    """Generates questions.
-    """
+    """Generates questions."""
     startTime = time.time()
     qCount = 0
     numSentences = 0
@@ -1002,8 +987,7 @@ def questionGen(parseFilename, outputFilename=None):
 
 
 def printQAs(qaiter, qid=0):
-    """Print QA pair.
-    """
+    """Print QA pair."""
     for qaitem in qaiter:
         log.info('Question {:d}: {} Answer: {}'.format(
             qid, qaitem[0], qaitem[1]))
@@ -1012,8 +996,7 @@ def printQAs(qaiter, qid=0):
 
 
 def stanfordParseSingle(parserFolder, sentence):
-    """Call stanford parser on a single sentence.
-    """
+    """Call stanford parser on a single sentence."""
     tmpFname = 'tmp.txt'
     tmpOutFname = 'tmpout.txt'
     with open(tmpFname, 'w') as f:
@@ -1039,8 +1022,7 @@ def stanfordParseFile(parserFolder, inputFilename, outputFilename):
 
 
 def runSentence(parserFolder, sentence):
-    """Run a single sentence.
-    """
+    """Run a single sentence."""
     s = stanfordParseSingle(parserFolder, sentence)
     s = s.split('\n')
     parser = TreeParser()
@@ -1063,6 +1045,7 @@ def runSentence(parserFolder, sentence):
 
 
 def runList(parserFolder, inputFilename, outputFilename=None):
+    """Run a list of sentences."""
     parseFilename = inputFilename + '.parse.txt'
     stanfordParseFile(parserFolder, inputFilename, parseFilename)
     questionGen(parseFilename, outputFilename)
